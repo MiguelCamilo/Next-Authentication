@@ -1,0 +1,16 @@
+// This code block defines the generator configuration for the Prisma client.
+// The generator is set to "prisma-client-js" which generates a JavaScript client for interacting with the Prisma database.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id   String @id @default(cuid())
+  name String
+}
