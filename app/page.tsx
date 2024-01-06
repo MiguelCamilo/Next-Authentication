@@ -12,7 +12,7 @@ const fonts = Poppins({
 export default function Home() {
   return (
     // gradient styling: https://tailwindcss.com/docs/gradient-color-stops
-    <main className="flex flex-col h-full items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+    <main className="flex flex-col h-full items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-stone-200 to-stone-700">
       <div className="space-y-6 text-center">
         <h1
           className={cn(
