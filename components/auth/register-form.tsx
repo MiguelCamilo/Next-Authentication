@@ -1,3 +1,4 @@
+
 'use client' // since we're using a hook (useForm)
 import * as React from 'react';
 
@@ -34,9 +35,9 @@ export const RegisterForm = () => {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
+        email: '',
+        password: '',
+        name: ''
     },
   });
 
@@ -55,9 +56,9 @@ export const RegisterForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back!"
+      headerLabel="Create an account"
       backButtonLabel="Already have an account?"
-      backButtonHref="/auth/register"
+      backButtonHref="/auth/login"
       showSocial
     >
       <Form
@@ -68,6 +69,25 @@ export const RegisterForm = () => {
             className='space-y-6'
         >
             <div className='space-y-4'>
+                <FormField 
+                    control={form.control}
+                    name='name'
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Name</FormLabel>                            
+                            <FormControl>
+                                <Input 
+                                    {...field}
+                                    disabled={isPending}                                    
+                                    placeholder='Name'                                
+                                />
+                            </FormControl>
+                            {/* to change the default FormMessage go into the LoginSchema */}
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                {/* email */}
                 <FormField 
                     control={form.control}
                     name='email'
@@ -82,7 +102,7 @@ export const RegisterForm = () => {
                                     placeholder='email.here@example.com'                                    
                                 />
                             </FormControl>
-                            {/* to change the default FormMessage go into the LoginSchema */}
+
                             <FormMessage />
                         </FormItem>
                     )}
@@ -114,7 +134,7 @@ export const RegisterForm = () => {
                 className='w-full'   
                 disabled={isPending}             
             >
-                Login
+                Create account
             </Button>
         </form>
       </Form>

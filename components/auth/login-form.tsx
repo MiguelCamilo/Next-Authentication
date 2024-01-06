@@ -42,7 +42,7 @@ export const LoginForm = () => {
   const handleLoginSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("")
     setSuccess("")
-    
+
     startTransition(() => {
       login(values)
         .then((data) => {
@@ -54,7 +54,9 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back!"
+      //TODO: render the users name if user has logged in before by using localStorage
+      
+      headerLabel="Welcome back"
       backButtonLabel="Dont have an account?"
       backButtonHref="/auth/register"
       showSocial
