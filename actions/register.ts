@@ -1,7 +1,13 @@
 'use server'
 
+// install bcryptjs and @types/bcryptjs if
+// standard bcrypt is giving errors
+import bcrypt from 'bcrypt'
 import * as z from 'zod'
+
+import { db } from '@/lib/db'
 import { RegisterSchema } from '@/schemas'
+import { getUserByEmail } from '@/data/user'
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
     const validatedFields = RegisterSchema.safeParse(values)
@@ -11,6 +17,25 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
             error: 'Invalid fields',
         }
     }
+    
+    const { name, email, password } = validatedFields.data
 
-    return { success: "Email sent!" }
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    // confirm if email is not taken
+    const exisitingUser = await getUserByEmail(email)
+
+    if(exisitingUser) return { error: "Email already in use!" }
+
+    await db.user.create({
+        data: {
+            name,
+            email,
+            password: hashedPassword,
+        }
+    })
+
+    //TODO: send verification token email
+
+    return { success: "Account created succesfully!" }
 }
