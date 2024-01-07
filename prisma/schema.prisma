@@ -1,5 +1,13 @@
 // This code block defines the generator configuration for the Prisma client.
 // The generator is set to "prisma-client-js" which generates a JavaScript client for interacting with the Prisma database.
+
+// prisma next auth docs
+// https://authjs.dev/reference/adapter/prisma
+
+// steps to update db: 
+// 1. npx prisma generate
+// 2. npx prisma db push
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,7 +18,34 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// user Table
+// the reason password is optional is
+// because if we use OAuth, we won't need a password
 model User {
-  id   String @id @default(cuid())
-  name String
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  accounts      Account[]
 }
