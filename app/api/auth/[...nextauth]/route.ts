@@ -1,1 +1,1 @@
-export { GET, POST } from "@/auth" // getting the auth file from root
+export { GET, POST } from "@/auth" 
