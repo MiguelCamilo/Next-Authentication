@@ -2,7 +2,7 @@
 
 // install bcryptjs and @types/bcryptjs if
 // standard bcrypt is giving errors
-import bcrypt from 'bcrypt'
+import bcryptjs from 'bcryptjs'
 import * as z from 'zod'
 
 import { db } from '@/lib/db'
@@ -20,7 +20,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     
     const { name, email, password } = validatedFields.data
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcryptjs.hash(password, 10)
 
     // confirm if email is not taken
     const exisitingUser = await getUserByEmail(email)
