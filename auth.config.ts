@@ -3,11 +3,10 @@ import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
 import type { NextAuthConfig } from 'next-auth';
 
-// import bcrypt from 'bcrypt';
 import bcryptjs from "bcryptjs"
 
-import { LoginSchema } from './schemas';
-import { getUserByEmail } from './data/user';
+import { LoginSchema } from '@/schemas';
+import { getUserByEmail } from '@/data/user';
 
 export default {
   providers: [
@@ -22,7 +21,7 @@ export default {
 
           const existingUser = await getUserByEmail(email);
           // if its not an exisitingUser in the db or a
-          // existingUser without a pwd(google/github OAuth)
+          // existingUser without a pwd(google/github OAuth) dont move forward
           if (!existingUser || !existingUser.password) return null;
 
           // if success, confirm pwd
@@ -44,7 +43,9 @@ export default {
  * Data Validation: The LoginSchema allows you to define a set of rules and
  * constraints for validating user input during the login process.
  * This helps ensure that the data provided by the user meets the expected format
- * and requirements. By validating the data before it is processed by
+ * and requirements. 
+ * 
+ * By validating the data before it is processed by
  * the authentication providers, you can prevent potential issues
  * or security vulnerabilities caused by invalid or malicious input.
  */
