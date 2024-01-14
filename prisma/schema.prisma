@@ -8,6 +8,9 @@
 // 1. npx prisma generate
 // 2. npx prisma db push
 
+// steps to reset db:
+// 1. npx prisma migrate reset
+
 generator client {
   provider = "prisma-client-js"
 }
