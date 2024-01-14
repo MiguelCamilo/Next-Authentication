@@ -37,6 +37,11 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 // user Table
 // the reason password is optional is
 // because if we use OAuth, we won't need a password
@@ -47,5 +52,6 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  role          UserRole  @default(USER) // default role would be USER
   accounts      Account[]
 }
