@@ -1,5 +1,7 @@
 'use client'; // since we're using a hook (useForm)
+
 import * as React from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -27,9 +29,15 @@ import { useTransition } from 'react';
 import { login } from '@/actions/login';
 
 export const LoginForm = () => {
+  const searchParams = useSearchParams();
+
   const [isPending, startTransition] = useTransition();
   const [error, setError] = React.useState<string | undefined>('');
   const [success, setSuccess] = React.useState<string | undefined>('');
+
+  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked'
+      ? 'Email already in use with different provider'
+      : '';
 
   // useFrom is similar to formik form validation
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -46,8 +54,9 @@ export const LoginForm = () => {
 
     startTransition(() => {
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        //TODO: Add when 2FA is implemented
+        // setSuccess(data?.success);
       });
     });
   };
@@ -111,7 +120,7 @@ export const LoginForm = () => {
                 )}
               />
             </div>
-            <FormError message={error} />
+            <FormError message={error || urlError} />
             <FormSuccess message={success} />
             <Button type="submit" className="w-full" disabled={isPending}>
               Login

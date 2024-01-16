@@ -19,7 +19,7 @@ export const {
   },
 
   // this will check if user logged in with an OAuth account
-  // and will not looked for the emailVerified field
+  // and will update the emailVerified field with new Date()
   events: {
     async linkAccount({ user }) {
       await db.user.update({

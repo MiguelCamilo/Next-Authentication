@@ -2,6 +2,7 @@ import { CardWrapper } from '@/components/auth/card-wrapper';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 const ErrorCard = () => {
+  
   return (
     <CardWrapper
       headerLabel="An error occured during authentication"

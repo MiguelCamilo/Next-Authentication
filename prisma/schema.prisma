@@ -58,3 +58,12 @@ model User {
   role          UserRole  @default(USER) // default role would be USER
   accounts      Account[]
 }
+
+model VerificationToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token]) // adds one unique token per email
+}
