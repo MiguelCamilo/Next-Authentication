@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import { signOut } from '@/auth';
 
 const Settings = async () => {
-    const session = await auth()
+    const session = await auth()    
 
     return ( 
         <div>
