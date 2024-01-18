@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from './db';
 import { getVerificationTokenByEmail } from '@/data/verification-token';
 
-//! LEFT OFF AT 6:52
 export const generateVerificationToken = async (email: string) => {
   const token = uuidv4();
   // setting tokem to expire in 1hr
