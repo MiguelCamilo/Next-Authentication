@@ -2,6 +2,7 @@
 
 import bcryptjs from 'bcryptjs';
 import * as z from 'zod';
+import { redirect } from 'next/navigation';
 
 import { db } from '@/lib/db';
 import { RegisterSchema } from '@/schemas';
@@ -31,7 +32,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     data: {
       name,
       email,
-      password: hashedPassword,
+      password: hashedPassword,      
     },
   });
 
@@ -39,5 +40,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
   await sendVerificationEmail(verificationToken.email, verificationToken.token, name);
 
-  return { success: 'Confirmation email sent!' };
-};
+  return {
+    success: 'A verification email has been sent. Please check your email.',
+  };    
+}

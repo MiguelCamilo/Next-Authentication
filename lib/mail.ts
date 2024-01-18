@@ -17,9 +17,9 @@ export const sendVerificationEmail = async (
       subject: 'NextAuth Email Verification',
       html: `<p>${
         name
-          ? `Hello ${name}, click <a href=${confirmLink}>here</a> to verify your email.`
-          : `Hello, click <a href=${confirmLink}>here</a> to verify your email.`
-      }</p>`,
+          ? `Hello ${name}, click <a href="${confirmLink}">here</a> to verify your email.`
+          : `Hello, click <a href="${confirmLink}">here</a> to verify your email.`
+      }</p>`,   
     });
   } catch (error) {
     return {
