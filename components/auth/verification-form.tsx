@@ -13,7 +13,6 @@ import { CardWrapper } from '@/components/auth/card-wrapper';
 export const NewVerificationForm = () => {
   //TODO: while email verification is processing disable login button
 
-  const [isLoading, setIsLoading] = React.useState<boolean | undefined>(false);
   const [error, setError] = React.useState<string | undefined>('');
   const [success, setSuccess] = React.useState<string | undefined>('');
 
@@ -21,8 +20,8 @@ export const NewVerificationForm = () => {
   const token = searchParams.get('token');
 
   const handleEmailVerificationSubmit = React.useCallback(() => {
-    setIsLoading(true);
-    
+    if(success || error) return // if theres a success || error then break
+
     if (!token) {
       setError('Missing token.');
       return;
@@ -35,12 +34,11 @@ export const NewVerificationForm = () => {
       .catch((error) => {
         setError('Something went wrong.');
         console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
-  }, [token]);
+  }, [token, success, error]);
 
+  // on component load the onSubmit will fire to check
+  // the token in the browser url
   React.useEffect(() => {
     handleEmailVerificationSubmit();
   }, [handleEmailVerificationSubmit]);
@@ -53,14 +51,9 @@ export const NewVerificationForm = () => {
       backButtonVariant={'outline'}
     >
       <div className="flex items-center w-full justify-center my-5">
-        {isLoading ? (
-          <PuffLoader color="gray" />
-        ) : (
-          <>
-            <FormError message={error} />
-            <FormSuccess message={success} />
-          </>
-        )}
+        {!success && !error && <PuffLoader color="gray" />}
+        <FormError message={error} />
+        <FormSuccess message={success} />
       </div>
     </CardWrapper>
   );

@@ -1,6 +1,7 @@
 'use client'; // since we're using a hook (useForm)
 
 import * as React from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import * as z from 'zod';
@@ -114,6 +115,18 @@ export const LoginForm = () => {
                         placeholder="* * * * * * * *"
                       />
                     </FormControl>
+                    <Button
+                      variant={"link"}
+                      size={"sm"}
+                      asChild
+                      className='px-0 font-normal'
+                    >
+                      <Link
+                        href={"/auth/reset"}
+                      >
+                        Forgot password?
+                      </Link>
+                    </Button>
                     <FormMessage />
                   </FormItem>
                 )}
