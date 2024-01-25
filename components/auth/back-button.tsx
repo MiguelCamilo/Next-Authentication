@@ -10,16 +10,39 @@ interface BackButtonProps {
   iconClassName?: string;
   href: string;
   label: string;
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
+    | null
+    | undefined;
 }
 
-export const BackButton = ({ href, label, variant, icon: BackButton, iconClassName }: BackButtonProps) => {
+export const BackButton = ({
+  href,
+  label,
+  variant,
+  icon: BackButton,
+  iconClassName,
+}: BackButtonProps) => {
   return (
-    <Button variant={variant || "link"} className="font-normal w-full" size={'sm'} asChild>
-      <div>
-        {BackButton && <BackButton className={iconClassName} />}
-        <Link href={href}>{label}</Link>
-      </div>
-    </Button>
+    <div className='w-full'>
+      <Link href={href}>
+        <Button
+          variant={variant || 'link'}
+          className="font-normal w-full"
+          size={'sm'}
+          asChild
+        >
+          <div>
+            {BackButton && <BackButton className={iconClassName} />}
+            {label}
+          </div>
+        </Button>
+      </Link>
+    </div>
   );
 };

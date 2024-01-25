@@ -13,6 +13,7 @@ import { IconType } from 'react-icons';
 
 interface CardWrapperProps {
   children: React.ReactNode;
+  cardTitle?: string;
   headerLabel: string;
   backButtonLabel: string;
   backButtonHref: string;
@@ -24,6 +25,7 @@ interface CardWrapperProps {
 
 export const CardWrapper = ({
   children,
+  cardTitle,
   headerLabel,
   backButtonLabel,
   backButtonHref,
@@ -35,7 +37,7 @@ export const CardWrapper = ({
   return (
     <Card className="w-[400px] shadow-md">
       <CardHeader>
-        <Header label={headerLabel} />
+        <Header label={headerLabel} cardTitle={cardTitle} />
       </CardHeader>
 
       <CardContent>{children}</CardContent>

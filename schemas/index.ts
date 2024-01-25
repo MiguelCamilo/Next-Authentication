@@ -22,6 +22,12 @@ export const RegisterSchema = z.object({
     }),
 })
 
+export const ResetSchema = z.object({
+    email: z.string().email({
+        message: 'Please enter a valid email address.',        
+    }),
+})
+
 /**
  * Represents the login form schema using Zod form validation.
  * Zod is a TypeScript-first schema validation library that allows you to define

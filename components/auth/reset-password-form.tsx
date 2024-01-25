@@ -5,6 +5,7 @@ import * as React from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { LoginSchema } from '@/schemas';
+import { ResetSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { PuffLoader } from 'react-spinners';
@@ -26,7 +27,6 @@ import { FormSuccess } from '@/components/form-success';
 
 // server actions from next js
 import { useTransition } from 'react';
-import { login } from '@/actions/login';
 
 export const ResetPasswordForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -34,32 +34,35 @@ export const ResetPasswordForm = () => {
   const [success, setSuccess] = React.useState<string | undefined>('');
 
   // useFrom is similar to formik form validation
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof ResetSchema>>({
+    resolver: zodResolver(ResetSchema),
     defaultValues: {
       email: '',
-      password: '',
     },
   });
 
-  const handleLoginSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const handleResetSubmit = (values: z.infer<typeof ResetSchema>) => {
     setError('');
     setSuccess('');
+    
+    alert(JSON.stringify(values))
 
-    startTransition(() => {
-      login(values).then((data) => {
-        setError(data?.error);        
-        setSuccess(data?.success);
-      });
-    });
+    // startTransition(() => {
+    //   login(values).then((data) => {
+    //     setError(data?.error);        
+    //     setSuccess(data?.success);
+    //   });
+    // });
   };
 
   return (
     <CardWrapper
       //TODO: render the users name if user has logged in before by using localStorage
-
-      headerLabel="Forgot your password?"
+      
+      cardTitle='Forgot your password?'
+      headerLabel="Enter the email you used to create your account so we can send you link to reset your password"
       backButtonLabel="Back to login"
+      backButtonVariant={"outline"}
       backButtonHref="/auth/login"
       icon={IoIosArrowRoundBack}
       iconClassName='h-5 w-5'
@@ -71,7 +74,7 @@ export const ResetPasswordForm = () => {
       ) : (
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleLoginSubmit)}
+            onSubmit={form.handleSubmit(handleResetSubmit)}
             className="space-y-6"
           >
             <div className="space-y-4">
@@ -80,7 +83,7 @@ export const ResetPasswordForm = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Enter your email</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -89,7 +92,7 @@ export const ResetPasswordForm = () => {
                         placeholder="email.here@example.com"
                       />
                     </FormControl>
-                    {/* to change the default FormMessage go into the LoginSchema */}
+                    {/* to change the default FormMessage go into the ResetSchema */}
                     <FormMessage />
                   </FormItem>
                 )}
