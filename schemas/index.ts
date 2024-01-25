@@ -9,7 +9,6 @@ export const LoginSchema = z.object({
     }),
 })
 
-
 export const RegisterSchema = z.object({
     name: z.string().min(1, {
         message: "Name requieres a minimum of 1 character."

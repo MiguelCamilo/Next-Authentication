@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
-import { LoginSchema } from '@/schemas';
 import { ResetSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -26,10 +25,10 @@ import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 
 // server actions from next js
-import { useTransition } from 'react';
+import { resetPassword } from '@/actions/reset-password';
 
 export const ResetPasswordForm = () => {
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string | undefined>('');
   const [success, setSuccess] = React.useState<string | undefined>('');
 
@@ -44,15 +43,14 @@ export const ResetPasswordForm = () => {
   const handleResetSubmit = (values: z.infer<typeof ResetSchema>) => {
     setError('');
     setSuccess('');
-    
-    alert(JSON.stringify(values))
 
-    // startTransition(() => {
-    //   login(values).then((data) => {
-    //     setError(data?.error);        
-    //     setSuccess(data?.success);
-    //   });
-    // });
+    startTransition(() => {
+      resetPassword(values)
+        .then((data) => {
+          setSuccess(data?.success)
+          setError(data?.error)
+        })
+    });
   };
 
   return (
