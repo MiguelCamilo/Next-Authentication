@@ -1,4 +1,4 @@
-'use serve'
+'use server'
 
 import * as z from 'zod'
 
@@ -12,14 +12,18 @@ export const resetPassword = async (values: z.infer<typeof ResetSchema>) => {
         return { error: 'Invalid email.' }
     }
 
-    const { email } = validatedFields.data // extracting email from input field
-    const exisitingUser = await getUserByEmail(email)
-
+    const { email } = validatedFields.data;  // extracting email from input field
+    const exisitingUser = await getUserByEmail(email)    
+        
     if(!exisitingUser) {
         return { error: 'Email not found.' }
     }
-
+    
     // TODO: generate token first, have user verify said token then send reset password email
-
-    return { success: `We have sent an email with password reset instructions to ${email}.` }
+    
+    if(exisitingUser) {
+        return { 
+            success: `We have sent an email with password reset instructions to ${email}` 
+        }
+    }
 }
