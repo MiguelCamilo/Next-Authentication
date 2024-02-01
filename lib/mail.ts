@@ -2,6 +2,22 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+export const sendTwoFactorCodeEmail = async (email: string, token: string, name?: string | null) => {
+  const resetLink = `http://localhost:3000/auth/`
+
+  try {
+    
+    
+  } catch (error) {
+    console.error(error)
+    return {
+      // TODO: changed verbage
+      error: 'Unable to send 2FA email.'
+    }
+  }
+  
+}
+
 export const sendPasswordResetEmail = async (email: string, token: string, name?: string | null) => {
   const resetLink = `http://localhost:3000/auth/new-password?token=${token}`
 
@@ -18,7 +34,7 @@ export const sendPasswordResetEmail = async (email: string, token: string, name?
     })
   } catch (error) {
     console.error(error)
-    return { error: `` }
+    return { error: `Unable to send reset password email.` }
   }
 }
 

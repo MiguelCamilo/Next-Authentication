@@ -6,7 +6,8 @@
 
 // steps to update db: 
 // 1. npx prisma generate
-// 2. npx prisma db push
+// 2. npx prisma migrate reset
+// 3. npx prisma db push
 
 // steps to reset db:
 // 1. npx prisma migrate reset
@@ -49,14 +50,26 @@ enum UserRole {
 // the reason password is optional is
 // because if we use OAuth, we won't need a password
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole  @default(USER) // default role would be USER
-  accounts      Account[]
+  id                 String    @id @default(cuid())
+  name               String?
+  email              String?   @unique
+  emailVerified      DateTime?
+  image              String?
+  password           String?
+  role               UserRole  @default(USER) // default role would be USER
+  isTwoFactorEnabled Boolean   @default(false)
+  
+  accounts Account[]
+  twoFactorConfirmation TwoFactorConfirmation?
+}
+
+model TwoFactorConfirmation {
+  id String @id @default(cuid())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
 }
 
 model VerificationToken {
@@ -69,6 +82,15 @@ model VerificationToken {
 }
 
 model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
   id      String   @id @default(cuid())
   email   String
   token   String   @unique
