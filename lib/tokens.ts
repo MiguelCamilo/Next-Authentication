@@ -64,7 +64,7 @@ export const generatePasswordResetToken = async (email: string) => {
 }
 
 export const generateTwoFactorToken = async (email: string) => {
-  const token = crypto.randomInt(100_000_000, 1_000_000).toString()
+  const token = crypto.randomInt(100_000, 1_000_000).toString()
   // setting token to expire in 15mins
   const expires = new Date(new Date().getTime() + 15 * 60 * 1000);
 

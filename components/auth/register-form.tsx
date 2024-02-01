@@ -1,5 +1,4 @@
-
-'use client' // since we're using a hook (useForm)
+'use client'; // since we're using a hook (useForm)
 import * as React from 'react';
 
 import * as z from 'zod';
@@ -24,35 +23,37 @@ import { FormSuccess } from '@/components/form-success';
 
 // server actions from next js
 import { useTransition } from 'react';
-import { register } from '@/actions/register'
+import { register } from '@/actions/register';
 
 export const RegisterForm = () => {
-  const [isPending, startTransition] = useTransition()
-  const [error, setError] = React.useState<string | undefined>("")
-  const [success, setSuccess] = React.useState<string | undefined>("")
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = React.useState<string | undefined>('');
+  const [success, setSuccess] = React.useState<string | undefined>('');
 
-    // useFrom is similar to formik form validation 
+  // useFrom is similar to formik form validation
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-        email: '',
-        password: '',
-        name: ''
+      email: '',
+      password: '',
+      name: '',
     },
   });
 
   const handleRegisterSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    setError("")
-    setSuccess("")
-    
+    setError('');
+    setSuccess('');
+
     startTransition(() => {
-        register(values)
-        .then((data) => {
-          setError(data.error)
-          setSuccess(data.success)
-        })
-    })
-  }
+      register(values).then((data) => {
+        if (data.error) {
+          form.resetField("email");
+        }
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
+  };
 
   return (
     <CardWrapper
@@ -61,81 +62,71 @@ export const RegisterForm = () => {
       backButtonHref="/auth/login"
       showSocial
     >
-      <Form
-        {...form}
-      >
+      <Form {...form}>
         <form
-            onSubmit={form.handleSubmit(handleRegisterSubmit)}
-            className='space-y-6'
+          onSubmit={form.handleSubmit(handleRegisterSubmit)}
+          className="space-y-6"
         >
-            <div className='space-y-4'>
-                <FormField 
-                    control={form.control}
-                    name='name'
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>                            
-                            <FormControl>
-                                <Input 
-                                    {...field}
-                                    disabled={isPending}                                    
-                                    placeholder='Name'                                
-                                />
-                            </FormControl>
-                            {/* to change the default FormMessage go into the LoginSchema */}
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                {/* email */}
-                <FormField 
-                    control={form.control}
-                    name='email'
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>                            
-                            <FormControl>
-                                <Input 
-                                    {...field}
-                                    disabled={isPending}
-                                    type='email'
-                                    placeholder='email.here@example.com'                                    
-                                />
-                            </FormControl>
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} disabled={isPending} placeholder="Name" />
+                  </FormControl>
+                  {/* to change the default FormMessage go into the LoginSchema */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      type="email"
+                      placeholder="email.here@example.com"
+                    />
+                  </FormControl>
 
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                {/* password */}
-                <FormField 
-                    control={form.control}
-                    name='password'
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>                            
-                            <FormControl>
-                                <Input 
-                                    {...field}
-                                    disabled={isPending}
-                                    type='password'
-                                    placeholder='* * * * * * * *'                                                                      
-                                />
-                            </FormControl>   
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
-            <FormError message={error} />
-            <FormSuccess message={success} />
-            <Button
-                type='submit'
-                className='w-full'   
-                disabled={isPending}             
-            >
-                Create account
-            </Button>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* password */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      type="password"
+                      placeholder="* * * * * * * *"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
+          <Button type="submit" className="w-full" disabled={isPending}>
+            Create account
+          </Button>
         </form>
       </Form>
     </CardWrapper>
