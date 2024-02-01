@@ -10,6 +10,7 @@ interface BackButtonProps {
   iconClassName?: string;
   href: string;
   label: string;
+  disabled?: boolean;
   variant?:
     | 'default'
     | 'destructive'
@@ -24,6 +25,7 @@ interface BackButtonProps {
 export const BackButton = ({
   href,
   label,
+  disabled,
   variant,
   icon: BackButton,
   iconClassName,
@@ -36,6 +38,7 @@ export const BackButton = ({
           className="font-normal w-full"
           size={'sm'}
           asChild
+          disabled={disabled}
         >
           <div>
             {BackButton && <BackButton className={iconClassName} />}

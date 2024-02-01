@@ -11,8 +11,7 @@ import { FormSuccess } from '../form-success';
 import { CardWrapper } from '@/components/auth/card-wrapper';
 
 export const NewVerificationForm = () => {
-  //TODO: while email verification is processing disable login button
-
+  const [isPending, setIsPending] = React.useState<boolean | undefined>(false);
   const [error, setError] = React.useState<string | undefined>('');
   const [success, setSuccess] = React.useState<string | undefined>('');
 
@@ -20,6 +19,7 @@ export const NewVerificationForm = () => {
   const token = searchParams.get('token');
 
   const handleEmailVerificationSubmit = React.useCallback(() => {
+    setIsPending(!isPending)
     if(success || error) return // if theres a success || error then break
 
     if (!token) {
@@ -34,8 +34,11 @@ export const NewVerificationForm = () => {
       .catch((error) => {
         setError('Something went wrong.');
         console.log(error);
-      });
-  }, [token, success, error]);
+      })
+      .finally(() => {
+        setIsPending(!isPending)
+      })
+  }, [token, success, error, setIsPending, isPending]);
 
   // on component load the onSubmit will fire to check
   // the token in the browser url
@@ -49,6 +52,7 @@ export const NewVerificationForm = () => {
       backButtonLabel="Back to login"
       backButtonHref="/auth/login"
       backButtonVariant={'outline'}
+      isBackButtonDisabled={isPending}
     >
       <div className="flex items-center w-full justify-center my-5">
         {!success && !error && <PuffLoader color="gray" />}

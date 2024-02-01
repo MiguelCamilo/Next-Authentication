@@ -19,6 +19,7 @@ interface CardWrapperProps {
   backButtonHref: string;
   backButtonVariant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined;
   showSocial?: boolean;
+  isBackButtonDisabled?: boolean;
   icon?: IconType;
   iconClassName?: string;
 }
@@ -31,6 +32,7 @@ export const CardWrapper = ({
   backButtonHref,
   backButtonVariant,
   showSocial,
+  isBackButtonDisabled,
   icon,
   iconClassName
 }: CardWrapperProps) => {
@@ -55,6 +57,7 @@ export const CardWrapper = ({
             variant={backButtonVariant}
             icon={icon}
             iconClassName={iconClassName}
+            disabled={isBackButtonDisabled}
         />
       </CardFooter>
     </Card>

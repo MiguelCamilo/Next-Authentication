@@ -30,6 +30,10 @@ export const generateVerificationToken = async (email: string) => {
   return newVerificationToken;
 };
 
+/**
+ * Generates password reset token and checks if user has an existing verified
+ * reset token and deletes if verified. 
+ */
 export const generatePasswordResetToken = async (email: string) => {
   const token = uuidv4();
 

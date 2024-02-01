@@ -2,10 +2,30 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+export const sendPasswordResetEmail = async (email: string, token: string, name?: string | null) => {
+  const resetLink = `http://localhost:3000/auth/new-password?token=${token}`
+
+  try {
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: 'NextAuth Password Reset Verification',
+      html: `<p>${
+        name
+          ? `Hello ${name}, click <a href="${resetLink}">here</a> to reset your password.`
+          : `Hello, click <a href="${resetLink}">here</a> to reset your password.`
+      }</p>`,
+    })
+  } catch (error) {
+    console.error(error)
+    return { error: `` }
+  }
+}
+
 export const sendVerificationEmail = async (
   email: string,
   token: string,
-  name?: string
+  name?: string | null
 ) => {
   // change to actual domain if it will be used to send email to others
   const confirmLink = `http://localhost:3000/auth/new-verification?token=${token}`;
@@ -22,6 +42,7 @@ export const sendVerificationEmail = async (
       }</p>`,   
     });
   } catch (error) {
+    console.error(error)
     return {
       error: 'Unable to send verification email.',
     };
