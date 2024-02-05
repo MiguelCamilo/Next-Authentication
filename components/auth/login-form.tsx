@@ -99,27 +99,10 @@ export const LoginForm = () => {
           >
             <div className="space-y-4">
               {showTwoFactor && (
-              <FormField
-              control={form.control}
-              name="twoFactorCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Two Factor Code</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="123456"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-                // <TwoFactorCodeForm
-                //   form={form}
-                //   isPending={isPending}
-                // />
+                <TwoFactorCodeForm
+                  form={form}
+                  isPending={isPending}
+                />
               )}
 
               {!showTwoFactor && (

@@ -8,7 +8,7 @@ export const LoginSchema = z.object({
         message: "Please enter your password."
     }),
     // example on how to make param optional
-    twoFactorCode: z.optional(z.string().min(6, {
+    code: z.optional(z.string().min(6, {
         message: 'Please enter full 6 digit authentication code provided.'
     }).max(6, {
         message: 'Please enter full 6 digit authentication code provided.'

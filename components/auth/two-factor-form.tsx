@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 
 interface TwoFactorCodeProps {
-    form: UseFormReturn<{ twoFactorCode?: string | undefined, email: string, password: string }>
+    form: UseFormReturn<{ code?: string | undefined, email: string, password: string }>
     isPending?: boolean;
 }
 
@@ -22,7 +22,7 @@ export const TwoFactorCodeForm = ({ form, isPending } : TwoFactorCodeProps) => {
      <div className='space-y-4'>
         <FormField
         control={form.control}
-        name="twoFactorCode"
+        name="code"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Two Factor Authentication Code</FormLabel>
