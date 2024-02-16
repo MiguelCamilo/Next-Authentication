@@ -15,9 +15,18 @@ interface CardWrapperProps {
   children: React.ReactNode;
   cardTitle?: string;
   headerLabel: string;
+  headerLabelClassName?: string;
   backButtonLabel: string;
   backButtonHref: string;
-  backButtonVariant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null | undefined;
+  backButtonVariant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
+    | null
+    | undefined;
   showSocial?: boolean;
   isBackButtonDisabled?: boolean;
   icon?: IconType;
@@ -28,36 +37,41 @@ export const CardWrapper = ({
   children,
   cardTitle,
   headerLabel,
+  headerLabelClassName,
   backButtonLabel,
   backButtonHref,
   backButtonVariant,
   showSocial,
   isBackButtonDisabled,
   icon,
-  iconClassName
+  iconClassName,
 }: CardWrapperProps) => {
   return (
     <Card className="w-[400px] shadow-md">
       <CardHeader>
-        <Header label={headerLabel} cardTitle={cardTitle} />
+        <Header
+          label={headerLabel}
+          labelClassName={headerLabelClassName}
+          cardTitle={cardTitle}
+        />
       </CardHeader>
 
       <CardContent>{children}</CardContent>
 
       {showSocial && (
         <CardFooter>
-            <Social />
+          <Social />
         </CardFooter>
       )}
 
       <CardFooter>
-        <BackButton 
-            href={backButtonHref}
-            label={backButtonLabel}
-            variant={backButtonVariant}
-            icon={icon}
-            iconClassName={iconClassName}
-            disabled={isBackButtonDisabled}
+        <BackButton
+          href={backButtonHref}
+          label={backButtonLabel}
+          variant={backButtonVariant}
+          icon={icon}
+          iconClassName={iconClassName}
+          disabled={isBackButtonDisabled}
         />
       </CardFooter>
     </Card>

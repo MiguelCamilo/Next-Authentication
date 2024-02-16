@@ -29,8 +29,11 @@ export const TwoFactorCodeForm = ({ form, isPending } : TwoFactorCodeProps) => {
             <FormControl>
               <Input
                 {...field}
+                value={field.value || ''}
                 disabled={isPending}
-                placeholder="*  *  *  *  *  *"                
+                placeholder="*  *  *  *  *  *"     
+                className='text-center'    
+                type='tel'
               />
             </FormControl>
             {/* to change the default FormMessage go into the LoginSchema */}

@@ -9,15 +9,16 @@ const font = Poppins({
 interface HeaderProps {
   cardTitle?: string;
   label: string;
+  labelClassName?: string;
 }
 
-export const Header = ({ label, cardTitle }: HeaderProps) => {
+export const Header = ({ label, cardTitle, labelClassName }: HeaderProps) => {
   return (
     <div className="w-full flex flex-col gap-y-4 items-center justify-center">
-      <h1 className={cn('text-3xl font-semibold', font.className)}>
+      <h1 className={cn('text-3xl font-semibold')}>
         {cardTitle || "Next Auth 🔐"}
       </h1>
-      <p className='text-muted-foreground text-xs text-center'>{label}</p>
+      <p className={labelClassName}>{label}</p>
     </div>
   );
 };

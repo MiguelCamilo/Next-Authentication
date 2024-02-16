@@ -2,17 +2,13 @@ import * as z from 'zod';
 
 export const LoginSchema = z.object({
     email: z.string().email({
-        message: 'Please enter a valid email address.',        
+        message: 'Please enter a valid email address.',
     }),
     password: z.string().min(1, {
         message: "Please enter your password."
     }),
     // example on how to make param optional
-    code: z.optional(z.string().min(6, {
-        message: 'Please enter full 6 digit authentication code provided.'
-    }).max(6, {
-        message: 'Please enter full 6 digit authentication code provided.'
-    }))
+    code: z.optional(z.string().min(6))
 })
 
 export const RegisterSchema = z.object({

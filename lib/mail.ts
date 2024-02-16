@@ -37,7 +37,7 @@ export const sendPasswordResetEmail = async (
   try {
     await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: email,
+      to: email,      
       subject: 'NextAuth Password Reset Verification',
       html: `<p>${
         name

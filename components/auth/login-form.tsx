@@ -61,8 +61,6 @@ export const LoginForm = () => {
     startTransition(() => {
       login(values)
         .then((data) => {
-          form.reset();
-
           if (data?.error) {
             setError(data.error);
           } else if (data?.success) {
@@ -83,6 +81,7 @@ export const LoginForm = () => {
       //TODO: render the users name if user has logged in before by using localStorage
 
       headerLabel="Welcome back"
+      headerLabelClassName='text-muted-foreground text-xs text-center'
       backButtonLabel="Dont have an account?"
       backButtonHref="/auth/register"
       showSocial={!showTwoFactor}

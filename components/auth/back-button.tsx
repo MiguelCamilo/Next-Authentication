@@ -27,7 +27,7 @@ export const BackButton = ({
   label,
   disabled,
   variant,
-  icon: BackButton,
+  icon: BackButtonIcon,
   iconClassName,
 }: BackButtonProps) => {
   return (
@@ -41,7 +41,7 @@ export const BackButton = ({
           disabled={disabled}
         >
           <div>
-            {BackButton && <BackButton className={iconClassName} />}
+            {BackButtonIcon && <BackButtonIcon className={iconClassName} />}
             {label}
           </div>
         </Button>
