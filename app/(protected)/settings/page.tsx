@@ -1,26 +1,27 @@
-'use client'
+'use client';
 
-import { useSession, signOut } from 'next-auth/react';
+import { logout } from '@/actions/logout';
+import { useCurrentUser } from '@/hooks/use-current-user';
 
 const Settings = () => {
-    const session = useSession()
-    return ( 
-        <div>            
-            <form>
-                <button
-                    onClick={() => {signOut()}}
-                    type='submit'
-                >
-                    Sign out
-                </button>
-            </form>
-        </div>
-     );
-}
- 
+  const user = useCurrentUser();
+
+  return (
+    <div className="bg-white p-10 rounded-xl">
+      <button
+        onClick={() => { logout() }}
+        type="submit"
+      >
+        Sign out
+      </button>
+    </div>
+  );
+};
+
 export default Settings;
 
-{/**
+{
+  /**
 // how to use a server action in a client component
 import { useSession } from 'next-auth/react';
 import { auth, signOut } from '@/auth';
@@ -46,4 +47,5 @@ const Settings = async () => {
 }
  
 export default Settings;
-*/}
+*/
+}
