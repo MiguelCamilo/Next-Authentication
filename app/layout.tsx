@@ -5,6 +5,8 @@ import './globals.css'
 import { auth } from '@/auth'
 import { SessionProvider } from 'next-auth/react'
 
+import { Toaster } from '@/components/ui/toaster'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -18,9 +20,12 @@ export default async function RootLayout({ children }:{ children: React.ReactNod
   return (
     // by wrapping the layout file in a SessionProvider
     // we can pull logged in data in the children components
-    <SessionProvider session={session}>
+    <SessionProvider session={session}>     
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          {children}
+          <Toaster />
+        </body>        
       </html>
     </SessionProvider>
   )

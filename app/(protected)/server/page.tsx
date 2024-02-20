@@ -1,8 +1,14 @@
-const ServerPage = () => {
+import { currentUser } from '@/lib/auth';
+
+import { UserInfo } from '@/components/user-info';
+
+const ServerPage = async () => {
+    const user = await currentUser()
     return ( 
-        <div>
-            Server Page
-        </div>
+        <UserInfo  
+            user={user}
+            label='Server Component 💻'
+        />
      );
 }
  
