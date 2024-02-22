@@ -27,13 +27,12 @@ import { FormSuccess } from '@/components/form-success';
 import { TwoFactorCodeForm } from '@/components/auth/two-factor-form';
 
 // server actions from next js
-import { useTransition } from 'react';
 import { login } from '@/actions/login';
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
 
-  const [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = React.useTransition();
   const [showTwoFactor, setShowTwoFactor] = React.useState<boolean | undefined>(
     false
   );

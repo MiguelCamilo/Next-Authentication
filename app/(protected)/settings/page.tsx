@@ -1,51 +1,50 @@
 'use client';
 
-import { logout } from '@/actions/logout';
-import { useCurrentUser } from '@/hooks/use-current-user';
+import * as React from 'react'
+
+import { useSession } from 'next-auth/react';
+
+import { settingsUpdate } from '@/actions/settings-update';
+
+import { toast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader,CardContent } from '@/components/ui/card';
+
 
 const Settings = () => {
-  const user = useCurrentUser();
+  const [isPending, startTransition] = React.useTransition();
+
+  const { update } = useSession() // allows up the session after user updates settings
+
+  const onSettingsUpdate = () => {
+    startTransition(() => {
+      settingsUpdate({
+        name: 'Test Name'
+      })
+      .then(() => {
+        update();
+      })
+    })
+  }
 
   return (
-    <div className="bg-white p-10 rounded-xl">
-      <button
-        onClick={() => { logout() }}
-        type="submit"
-      >
-        Sign out
-      </button>
-    </div>
+    <Card className="max-w-[600px]">
+      <CardHeader>
+        <p className='text-2xl font-semibold text-center'>
+          Settings ⚙️
+        </p>
+      </CardHeader>
+
+      <CardContent>
+        <Button 
+          onClick={onSettingsUpdate}
+          disabled={isPending}
+        >          
+          Updated Name
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 
 export default Settings;
-
-{
-  /**
-// how to use a server action in a client component
-import { useSession } from 'next-auth/react';
-import { auth, signOut } from '@/auth';
-
-const Settings = async () => {
-    const session = await auth()
-
-    return ( 
-        <div>
-            {JSON.stringify(session)}
-            <form action={async () => {
-                "use server"
-                await signOut()
-            }}>
-                <button
-                    type='submit'
-                >
-                    Sign out
-                </button>
-            </form>
-        </div>
-     );
-}
- 
-export default Settings;
-*/
-}

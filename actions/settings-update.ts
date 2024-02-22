@@ -13,4 +13,19 @@ export const settingsUpdate = async (values: z.infer<typeof SettingsSchema>) => 
     if(!user) {
         return { error: 'Unauthorized' }
     }
+
+    const exisingUser = await getUserById(user.id)
+
+    if(!exisingUser) return { error: 'Unauthorized' }
+
+    await db.user.update({
+        where: {
+            id: exisingUser.id
+        },
+        data: {
+            ...values,
+        }
+    })
+
+    return { success: 'Settings Updated!' }
 }

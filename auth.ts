@@ -74,6 +74,11 @@ export const {
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
 
+      if(session.user) {
+        session.user.name = token.name;     
+        session.user.email = token.email;
+      }
+
       return session;
     },
 
@@ -84,6 +89,9 @@ export const {
       const exisitingUser = await getUserById(token.sub);
 
       if (!exisitingUser) return token;
+
+      token.name = exisitingUser.name
+      token.email = exisitingUser.email
 
       token.role = exisitingUser.role; // how to return the logged in user role
       token.isTwoFactorEnabled = exisitingUser.isTwoFactorEnabled; // how to return the logged in user 2FA status
