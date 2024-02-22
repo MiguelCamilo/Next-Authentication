@@ -7,6 +7,7 @@ import { UserRole } from '@prisma/client';
 import authConfig from '@/auth.config';
 import { getUserById } from '@/data/user';
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
+import { getAccountTypeByUserId } from '@/data/account';
 
 export const {
   handlers: { GET, POST },
@@ -77,6 +78,7 @@ export const {
       if(session.user) {
         session.user.name = token.name;     
         session.user.email = token.email;
+        session.user.isOAuth = token.isOAuth as boolean;
       }
 
       return session;
@@ -90,6 +92,10 @@ export const {
 
       if (!exisitingUser) return token;
 
+      const exisitingAccount = await getAccountTypeByUserId(exisitingUser.id);
+
+      // by turning this into a boolean it checks if exisitingAccount is true then token.isOAuth is true
+      token.isOAuth = !!exisitingAccount
       token.name = exisitingUser.name
       token.email = exisitingUser.email
 

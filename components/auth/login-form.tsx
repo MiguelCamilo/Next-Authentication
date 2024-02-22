@@ -33,14 +33,11 @@ export const LoginForm = () => {
   const searchParams = useSearchParams();
 
   const [isPending, startTransition] = React.useTransition();
-  const [showTwoFactor, setShowTwoFactor] = React.useState<boolean | undefined>(
-    false
-  );
+  const [showTwoFactor, setShowTwoFactor] = React.useState<boolean | undefined>(false);
   const [error, setError] = React.useState<string | undefined>('');
   const [success, setSuccess] = React.useState<string | undefined>('');
 
-  const urlError =
-    searchParams.get('error') === 'OAuthAccountNotLinked'
+  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked'
       ? 'Email already in use with different provider'
       : '';
 
@@ -49,7 +46,7 @@ export const LoginForm = () => {
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: '',
-      password: '',      
+      password: '',
     },
   });
 
@@ -80,7 +77,7 @@ export const LoginForm = () => {
       //TODO: render the users name if user has logged in before by using localStorage
 
       headerLabel="Welcome back"
-      headerLabelClassName='text-muted-foreground text-xs text-center'
+      headerLabelClassName="text-muted-foreground text-xs text-center"
       backButtonLabel="Dont have an account?"
       backButtonHref="/auth/register"
       showSocial={!showTwoFactor}
@@ -97,10 +94,7 @@ export const LoginForm = () => {
           >
             <div className="space-y-4">
               {showTwoFactor && (
-                <TwoFactorCodeForm
-                  form={form}
-                  isPending={isPending}
-                />
+                <TwoFactorCodeForm form={form} isPending={isPending} />
               )}
 
               {!showTwoFactor && (
