@@ -4,9 +4,11 @@ import * as z from 'zod'
 
 import { db } from '@/lib/db'
 import { currentUser } from '@/lib/auth'
-import { getUserByEmail, getUserById } from '@/data/user'
-import { SettingsSchema } from '@/schemas'
+import { sendVerificationEmail } from '@/lib/mail'
 import { generateVerificationToken } from '@/lib/tokens'
+
+import { SettingsSchema } from '@/schemas'
+import { getUserByEmail, getUserById } from '@/data/user'
 
 export const settingsUpdate = async (values: z.infer<typeof SettingsSchema>) => {
     const user = await currentUser()
@@ -34,8 +36,10 @@ export const settingsUpdate = async (values: z.infer<typeof SettingsSchema>) => 
         }
 
         const verificationToken = await generateVerificationToken(values.email)
-        
-    }
+        await sendVerificationEmail(verificationToken.email, verificationToken.token)
+
+        return { success: 'Verfiication email sent. Please verify your email to update your settings.'}
+    }    
 
     await db.user.update({
         where: {

@@ -20,8 +20,7 @@ export const sendTwoFactorCodeEmail = async (
     });
   } catch (error) {
     console.error(error);
-    return {
-      // TODO: changed verbage
+    return {      
       error: 'Unable to send 2FA email.',
     };
   }

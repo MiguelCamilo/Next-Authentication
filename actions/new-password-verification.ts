@@ -13,7 +13,7 @@ import { getUserByEmail } from '@/data/user';
  * the associated email exists, and the new password meets the required criteria.
  * @param values - An object containing the new password and its confirmation.
  * @param token - The unique token associated with the password reset request.
- * @returns An object with an error message if the verification fails, or undefined if successful.
+ * @returns
  */
 export const newPasswordVerification = async (
   values: z.infer<typeof NewPasswordSchema>,
