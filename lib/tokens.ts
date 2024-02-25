@@ -6,6 +6,14 @@ import { getVerificationTokenByEmail } from '@/data/verification-token';
 import { getPasswordResetTokenByEmail } from '@/data/password-reset-token';
 import { getTwoFactorTokenByEmail } from '@/data/two-factor-token';
 
+/**
+ * Generates a verification token and checks if user has an existing verification
+ * token and deletes if true. If user does not have an existing token, it creates
+ * a new one.
+ * @param email
+ * @returns
+ */
+
 export const generateVerificationToken = async (email: string) => {
   const token = uuidv4();
   // setting token to expire in 1hr
@@ -34,7 +42,9 @@ export const generateVerificationToken = async (email: string) => {
 
 /**
  * Generates password reset token and checks if user has an existing verified
- * reset token and deletes if verified. 
+ * reset token and deletes if verified.
+ * @param email
+ * @returns 
  */
 export const generatePasswordResetToken = async (email: string) => {
   const token = uuidv4();
@@ -63,6 +73,12 @@ export const generatePasswordResetToken = async (email: string) => {
     return newPasswordResetToken
 }
 
+/**
+ * Generates a two factor token and checks if user has an existing two factor token
+ * and deletes if true. If user does not have an existing token, it creates a new one.
+ * @param email
+ * @returns 
+ */
 export const generateTwoFactorToken = async (email: string) => {
   const token = crypto.randomInt(100_000, 1_000_000).toString()
   // setting token to expire in 5mins

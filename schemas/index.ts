@@ -1,8 +1,35 @@
 import * as z from 'zod';
 
+import { UserRole } from '@prisma/client';
+
 export const SettingsSchema = z.object({
-    name: z.optional(z.string())
+    name: z.optional(z.string().min(3, {
+        message: 'Name requires a minimum of 3 characters.'
+    })),
+    isTwoFactorEnabled: z.optional(z.boolean()),
+    role: z.enum([UserRole.ADMIN, UserRole.USER]),
+    email: z.optional(z.string().email()),
+    password: z.optional(z.string().min(6)),
+    newPassword: z.optional(z.string().min(6))
+
+    // .refind is a zod method that allows you to add custom validation
+}).refine((data) => { 
+    // if user makes a change to their password, 
+    // they must also provide a new password
+    if(data.password && !data.newPassword) {
+        return false;
+    }
+
+    if(data.newPassword && !data.password) {
+        return false;
+    }
+
+    return true;
+}, {
+    message: 'New password is required when changing password.',
+    path: ['newPassword']
 })
+
 
 export const LoginSchema = z.object({
     email: z.string().email({

@@ -6,7 +6,7 @@ import { useCurrentRole } from '@/hooks/use-current-role';
 import { FormError } from '@/components/form-error';
 
 interface RoleGateProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     allowedRole: UserRole;
 }
 
