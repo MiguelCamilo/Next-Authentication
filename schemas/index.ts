@@ -26,7 +26,7 @@ export const SettingsSchema = z.object({
 
     return true;
 }, {
-    message: 'New password is required when changing password.',
+    message: 'Both fields required when changing password.',
     path: ['newPassword']
 })
 

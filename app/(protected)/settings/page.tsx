@@ -130,17 +130,18 @@ const Settings = () => {
                     )}
                   />
 
-                  {/* password */}
+                  {/* current password */}
                   <FormField
                     control={form.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>New Password</FormLabel>
+                        <FormLabel>Current Password</FormLabel>
                         <FormControl>
                           <Input
                             {...field}
-                            placeholder="* * * * * * * *"
+                            type='password'
+                            placeholder="Enter your current password"
                             disabled={isPending}
                           />
                         </FormControl>
@@ -155,11 +156,12 @@ const Settings = () => {
                     name="newPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Confirm New Password</FormLabel>
+                        <FormLabel>New Password</FormLabel>
                         <FormControl>
                           <Input
                             {...field}
-                            placeholder="* * * * * * * *"
+                            type='password'
+                            placeholder="Enter a new password"
                             disabled={isPending}
                           />
                         </FormControl>
