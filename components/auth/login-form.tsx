@@ -33,11 +33,14 @@ export const LoginForm = () => {
   const searchParams = useSearchParams();
 
   const [isPending, startTransition] = React.useTransition();
-  const [showTwoFactor, setShowTwoFactor] = React.useState<boolean | undefined>(false);
+  const [showTwoFactor, setShowTwoFactor] = React.useState<boolean | undefined>(
+    false
+  );
   const [error, setError] = React.useState<string | undefined>('');
   const [success, setSuccess] = React.useState<string | undefined>('');
 
-  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked'
+  const urlError =
+    searchParams.get('error') === 'OAuthAccountNotLinked'
       ? 'Email already in use with different provider'
       : '';
 
@@ -73,32 +76,36 @@ export const LoginForm = () => {
   };
 
   return (
-    <CardWrapper
-      //TODO: render the users name if user has logged in before by using localStorage
-
-      headerLabel="Welcome back"
-      headerLabelClassName="text-muted-foreground text-xs text-center"
-      backButtonLabel="Dont have an account?"
-      backButtonHref="/auth/register"
-      showSocial={!showTwoFactor}
-    >
-      {isPending ? (
-        <div className="flex justify-center items-center p-20">
-          <PuffLoader color="gray" />
-        </div>
+    <>
+      {showTwoFactor ? (
+        <TwoFactorCodeForm
+          form={form}
+          success={success}
+          error={error}       
+          isPending={isPending}
+          handleLoginSubmit={handleLoginSubmit}
+        />
       ) : (
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleLoginSubmit)}
-            className="space-y-6"
-          >
-            <div className="space-y-4">
-              {showTwoFactor && (
-                <TwoFactorCodeForm form={form} isPending={isPending} />
-              )}
+        <CardWrapper
+          //TODO: render the users name if user has logged in before by using localStorage
 
-              {!showTwoFactor && (
-                <>
+          headerLabel="Welcome"
+          headerLabelClassName="text-muted-foreground text-xs text-center"
+          backButtonLabel="Dont have an account?"
+          backButtonHref="/auth/register"
+          showSocial={!showTwoFactor}
+        >
+          {isPending ? (
+            <div className="flex justify-center items-center p-20">
+              <PuffLoader color="gray" />
+            </div>
+          ) : (
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleLoginSubmit)}
+                className="space-y-6"
+              >
+                <div className="space-y-4">
                   <FormField
                     control={form.control}
                     name="email"
@@ -145,17 +152,17 @@ export const LoginForm = () => {
                       </FormItem>
                     )}
                   />
-                </>
-              )}
-            </div>
-            <FormError message={error || urlError} />
-            <FormSuccess message={success} />
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {showTwoFactor ? 'Confirm' : 'Login'}
-            </Button>
-          </form>
-        </Form>
+                </div>
+                <FormError message={error || urlError} />
+                <FormSuccess message={success} />
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  Login
+                </Button>
+              </form>
+            </Form>
+          )}
+        </CardWrapper>
       )}
-    </CardWrapper>
+    </>
   );
 };

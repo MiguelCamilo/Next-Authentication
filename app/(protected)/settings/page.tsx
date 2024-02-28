@@ -49,7 +49,7 @@ const Settings = () => {
       role: user?.role || undefined,
       password: undefined,
       newPassword: undefined,
-      isTwoFactorEnabled: user?.isTwoFactorEnabled,
+      isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
     },
   });
 
@@ -61,13 +61,14 @@ const Settings = () => {
       settingsUpdate(values)
         .then((response) => {
           if (response?.error) {
-            toast({ title: `${response?.error}`, variant: 'destructive' });
+            // toast({ title: `${response?.error}`, variant: 'destructive' });      
+            setError(response?.error);
           }
           if (response?.success) {
             update();
             toast({ title: `${response.success}`, variant: 'success' });
           }
-        })
+        })        
         .catch((error) => {
           setError(`Unable to update settings: ${error}`);
         });
