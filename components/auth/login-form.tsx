@@ -30,19 +30,15 @@ import { TwoFactorCodeForm } from '@/components/auth/two-factor-form';
 import { login } from '@/actions/login';
 
 export const LoginForm = () => {
-  const searchParams = useSearchParams();
-
   const [isPending, startTransition] = React.useTransition();
-  const [showTwoFactor, setShowTwoFactor] = React.useState<boolean | undefined>(
-    false
-  );
+  const [showTwoFactor, setShowTwoFactor] = React.useState<boolean | undefined>(false);
   const [error, setError] = React.useState<string | undefined>('');
   const [success, setSuccess] = React.useState<string | undefined>('');
 
-  const urlError =
-    searchParams.get('error') === 'OAuthAccountNotLinked'
-      ? 'Email already in use with different provider'
-      : '';
+  const searchParams = useSearchParams();
+
+  const urlError = searchParams.get('error') === 'OAuthAccountNotLinked' ? 'Email already in use with different provider' : '';
+  const callBackUrl = searchParams.get('callbackUrl') // searchParams is looking for the callbackUrl param and its data
 
   // useFrom is similar to formik form validation
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -58,7 +54,7 @@ export const LoginForm = () => {
     setSuccess('');
 
     startTransition(() => {
-      login(values)
+      login(values, callBackUrl)
         .then((data) => {
           if (data?.error) {
             setError(data.error);

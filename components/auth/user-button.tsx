@@ -47,8 +47,8 @@ export const UserButton = () => {
           <Dialog>
             {/* stopPropagation is used due to embedding a clickable component within another */}
             <DialogTrigger
-              className="flex flex-row"
-              onClick={(event) => event.stopPropagation()}
+              className="flex flex-row w-full"
+              onClick={(event) => event.stopPropagation()}              
             >
               <AiFillEdit className="h-4 w-4 mr-2 text-gray-400" />
               Update Picture
