@@ -19,7 +19,7 @@ export const NewVerificationForm = () => {
   const token = searchParams.get('token');
 
   const handleEmailVerificationSubmit = React.useCallback(() => {
-    setIsPending(!isPending)
+    setIsPending(true)
     if(success || error) return // if theres a success || error then break
 
     if (!token) {
@@ -36,9 +36,9 @@ export const NewVerificationForm = () => {
         console.log(error);
       })
       .finally(() => {
-        setIsPending(!isPending)
+        setIsPending(false)
       })
-  }, [token, success, error, setIsPending, isPending]);
+  }, [token, success, error, setIsPending]);
 
   // on component load the onSubmit will fire to check
   // the token in the browser url
@@ -52,7 +52,7 @@ export const NewVerificationForm = () => {
       backButtonLabel="Back to login"
       backButtonHref="/auth/login"
       backButtonVariant={'outline'}
-      isBackButtonDisabled={isPending}
+      // isBackButtonDisabled={isPending}
     >
       <div className="flex items-center w-full justify-center my-5">
         {!success && !error && <PuffLoader color="gray" />}
