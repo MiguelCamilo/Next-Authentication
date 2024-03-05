@@ -1,7 +1,23 @@
 'use client';
 
+import * as React from 'react';
+import * as z from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { SettingsSchema } from '@/schemas';
+import { settingsUpdate } from '@/actions/settings-update';
 import { useCurrentUser } from '@/hooks/use-current-user';
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormDescription,
+  FormMessage,
+} from '@/components/ui/form';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,20 +32,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-
+import ImageUpload from '@/components/image-upload';
 import { LogOutButton } from '@/components/auth/logout-button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 import { FaUser } from 'react-icons/fa';
 import { ExitIcon } from '@radix-ui/react-icons';
 import { AiFillEdit } from 'react-icons/ai';
 
 export const UserButton = () => {
+  const [isPending, startTransition] = React.useTransition();
+
   const user = useCurrentUser();
 
-  //todo: impliment modal for profile picture update
+  const form = useForm<z.infer<typeof SettingsSchema>>({
+    resolver: zodResolver(SettingsSchema),
+    defaultValues: {
+      profileImage: '' // user?.profileImage
+    }
+  })
 
-  const onProfileImageClick = () => {};
+  const onProfileImageClick = () => {
+
+    startTransition(() => {
+
+    })
+  }; 
 
   return (
     <DropdownMenu>
@@ -55,7 +83,38 @@ export const UserButton = () => {
             </DialogTrigger>
 
             <DialogContent>
-              <DialogHeader>Test</DialogHeader>
+              <DialogHeader className='font-bold text-xl'>Edit Profile Picture</DialogHeader>
+              <DialogDescription>
+                <Form
+                  {...form}
+                >
+                  <form 
+                    className='space-y-4'
+                    onSubmit={form.handleSubmit(onProfileImageClick)}
+                  >
+                    <FormField
+                      control={form.control}
+                      name='profileImage'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <ImageUpload 
+                              {...field}
+                              label='Upload Profile Image'
+                              value={field.value}
+                              disabled={isPending}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    >
+                      
+                    </FormField>
+                  </form>
+
+                </Form>
+              </DialogDescription>
             </DialogContent>
           </Dialog>
         </DropdownMenuItem>
