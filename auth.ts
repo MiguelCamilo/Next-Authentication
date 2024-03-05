@@ -77,7 +77,7 @@ export const {
 
       if(session.user) {
         session.user.name = token.name;     
-        session.user.email = token.email;
+        session.user.email = token.email;        
         session.user.isOAuth = token.isOAuth as boolean;
       }
 
@@ -98,6 +98,7 @@ export const {
       token.isOAuth = !!exisitingAccount
       token.name = exisitingUser.name
       token.email = exisitingUser.email
+      token.profileImage = exisitingUser.profileImage
 
       token.role = exisitingUser.role; // how to return the logged in user role
       token.isTwoFactorEnabled = exisitingUser.isTwoFactorEnabled; // how to return the logged in user 2FA status

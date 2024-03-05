@@ -6,9 +6,9 @@ import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 import { AiOutlineClose } from 'react-icons/ai';
-
 interface ImageUploadsInteface {
   value?: string;
   disabled?: boolean;
@@ -40,6 +40,8 @@ const ImageUpload = ({
         setBase64(event.target.value);
         handleChange(event.target.value);
       };
+
+      reader.readAsDataURL(file)
     },
     [handleChange]
   );
@@ -64,19 +66,25 @@ const ImageUpload = ({
   );
 
   return (
+    // use shadcn to change the ui for the image upload
     <div
       {...getRootProps({
         className:
           'relative w-full p-4 text-white text-center border-2 border-dotted rounded-md border-gray-600 cursor-pointer hover:border-solid duration-150',
       })}
     >
+      <AiOutlineClose
+        className="absolute right-2 top-2 text-black hover:bg-neutral-200 rounded-full p-1"
+        size={20}
+        onClick={handleRemove}
+      />
       <Input {...getInputProps()} />
       {base64 ? (
         <div className="flex items-center justify-center">
           <Image src={base64} height="100" width="100" alt="Uploaded Image" />
         </div>
       ) : (
-        <p className="text-white">{label}</p>
+        <span className="text-base text-black">{label}</span>
       )}
     </div>
   );

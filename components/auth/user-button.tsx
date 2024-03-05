@@ -48,14 +48,14 @@ export const UserButton = () => {
   const form = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
     defaultValues: {
-      profileImage: '' // user?.profileImage
+      profileImage: user?.profileImage || undefined,
     }
   })
 
-  const onProfileImageClick = () => {
+  const onProfileImageClick = (values: z.infer<typeof SettingsSchema>) => {
 
     startTransition(() => {
-
+      settingsUpdate(values);
     })
   }; 
 
@@ -98,12 +98,11 @@ export const UserButton = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <ImageUpload 
-                              {...field}
-                              label='Upload Profile Image'
+                            <ImageUpload                               
                               value={field.value}
-                              disabled={isPending}
                               onChange={field.onChange}
+                              label='Upload Profile Image'                              
+                              disabled={isPending}                    
                             />
                           </FormControl>
                         </FormItem>
