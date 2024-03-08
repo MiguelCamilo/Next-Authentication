@@ -25,6 +25,7 @@
     "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "input-otp": "^1.0.1",
     "next": "14.0.4",
     "next-auth": "^5.0.0-beta.4",
     "react": "^18",

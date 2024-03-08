@@ -40,7 +40,7 @@ export const LoginSchema = z.object({
         message: "Please enter your password."
     }),
     // example on how to make param optional
-    code: z.optional(z.string().min(6))
+    code: z.optional(z.string())
 })
 
 export const RegisterSchema = z.object({

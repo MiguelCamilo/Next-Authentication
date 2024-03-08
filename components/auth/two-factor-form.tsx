@@ -1,3 +1,4 @@
+import * as React from 'react';
 import * as z from 'zod';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -11,6 +12,12 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
 import { CardWrapper } from '@/components/auth/card-wrapper';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -29,14 +36,21 @@ interface TwoFactorCodeProps {
   handleLoginSubmit: (values: z.infer<typeof LoginSchema>) => void;
 }
 
-export const TwoFactorCodeForm = ({ form, success, error, isPending, handleLoginSubmit }: TwoFactorCodeProps) => {
+export const TwoFactorCodeForm = ({
+  form,
+  success,
+  error,
+  isPending,
+  handleLoginSubmit,
+}: TwoFactorCodeProps) => {
   return (
     <CardWrapper
-      cardTitle='Two Factor Authentication'
+      cardTitle="Two Factor Authentication"
       headerLabel="Enter 2FA Code that was sent to your email."
       headerLabelClassName="text-muted-foreground text-xs text-center"
-      backButtonLabel="Back to Register"
+      backButtonLabel="Back"
       backButtonHref="/auth/register"
+      backButtonVariant={'outline'}
     >
       <Form {...form}>
         <form
@@ -49,18 +63,32 @@ export const TwoFactorCodeForm = ({ form, success, error, isPending, handleLogin
               name="code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Two Factor Authentication Code</FormLabel>
+                  <FormLabel className='flex justify-center'>Two Factor Authentication Code</FormLabel>
                   <FormControl>
-                    <Input
+                    <InputOTP
                       {...field}
                       value={field.value || ''}
-                      disabled={isPending}
-                      placeholder="*  *  *  *  *  *"
-                      className="text-center"
                       type="tel"
+                      disabled={isPending}
+                      maxLength={6}
+                      className="flex justify-center"
+                      render={({ slots }) => (
+                        <InputOTPGroup className="gap-2">
+                          {slots.map((slot, index) => (
+                            <React.Fragment key={index}>
+                              <InputOTPSlot
+                                className="rounded-md border"
+                                {...slot}
+                              />
+                              {index !== slots.length - 1 && (
+                                <InputOTPSeparator />
+                              )}
+                            </React.Fragment>
+                          ))}{' '}
+                        </InputOTPGroup>
+                      )}
                     />
                   </FormControl>
-                  {/* to change the default FormMessage go into the LoginSchema */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -69,7 +97,7 @@ export const TwoFactorCodeForm = ({ form, success, error, isPending, handleLogin
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" className="w-full" disabled={isPending}>
-            Confirm                  
+            Confirm
           </Button>
         </form>
       </Form>
