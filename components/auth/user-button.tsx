@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import * as z from 'zod';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -14,7 +15,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormDescription,
   FormMessage,
 } from '@/components/ui/form';
@@ -32,9 +32,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import ImageUpload from '@/components/image-upload';
 import { LogOutButton } from '@/components/auth/logout-button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { FormSuccess } from '@/components/form-success';
+import { FormError } from '@/components/form-error';
 
 import { FaUser } from 'react-icons/fa';
 import { ExitIcon } from '@radix-ui/react-icons';
@@ -42,28 +45,47 @@ import { AiFillEdit } from 'react-icons/ai';
 
 export const UserButton = () => {
   const [isPending, startTransition] = React.useTransition();
+  const [success, setSuccess] = React.useState<string | undefined>('');
+  const [error, setError] = React.useState<string | undefined>('');
 
   const user = useCurrentUser();
+  const { update } = useSession();  
 
   const form = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
     defaultValues: {
-      profileImage: user?.profileImage || undefined,
-    }
-  })
+      role: user?.role || undefined,   
+      image: user?.image || undefined
+    },
+  });
 
-  const onProfileImageClick = (values: z.infer<typeof SettingsSchema>) => {
+  const updateUserProfileImage = (values: z.infer<typeof SettingsSchema>) => {
+    setError('');
+    setSuccess('');
 
     startTransition(() => {
-      settingsUpdate(values);
-    })
-  }; 
+      settingsUpdate(values)
+        .then((response) => {          
+          update();
+          if (response?.success) {
+            setSuccess(response?.success);
+          }
+          if (response?.error) {
+            setError(response?.error);
+          }
+        })
+        .catch((error) => {
+          console.error(`Error updating settings: ${error}`);
+          setError(`Unable to update settings`);
+        });
+    });
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src={user?.image || ''} />
+          <AvatarImage src={user?.image} />
           <AvatarFallback className="bg-gray-400">
             <FaUser className="text-white" />
           </AvatarFallback>
@@ -71,52 +93,58 @@ export const UserButton = () => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-40" align="end">
-        <DropdownMenuItem>
+        {/* <DropdownMenuItem>
           <Dialog>
-            {/* stopPropagation is used due to embedding a clickable component within another */}
             <DialogTrigger
               className="flex flex-row w-full"
-              onClick={(event) => event.stopPropagation()}              
+              onClick={(event) => event.stopPropagation()}
             >
               <AiFillEdit className="h-4 w-4 mr-2 text-gray-400" />
               Update Picture
             </DialogTrigger>
 
             <DialogContent>
-              <DialogHeader className='font-bold text-xl'>Edit Profile Picture</DialogHeader>
+              <DialogHeader className="font-bold text-xl">
+                Edit Profile Picture
+              </DialogHeader>
               <DialogDescription>
-                <Form
-                  {...form}
-                >
-                  <form 
-                    className='space-y-4'
-                    onSubmit={form.handleSubmit(onProfileImageClick)}
+
+                <div className="space-y-4">                  
+                  <FormSuccess message={success} />
+                  <FormError message={error} />
+                </div>
+
+                <Form {...form}>
+                  <form
+                    className="space-y-4"
+                    onSubmit={form.handleSubmit(updateUserProfileImage)}
                   >
+                    <FormMessage />
                     <FormField
                       control={form.control}
-                      name='profileImage'
+                      name="image"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <ImageUpload                               
+                            <ImageUpload
                               value={field.value}
                               onChange={field.onChange}
-                              label='Upload Profile Image'                              
-                              disabled={isPending}                    
+                              disabled={isPending}
+                              label="Upload Profile Image"
                             />
-                          </FormControl>
+                          </FormControl>                          
                         </FormItem>
                       )}
-                    >
-                      
-                    </FormField>
+                    />
+                    <Button onClick={(event) => event.stopPropagation()} type="submit" className="w-full">
+                      Update
+                    </Button>
                   </form>
-
                 </Form>
               </DialogDescription>
             </DialogContent>
           </Dialog>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
 
         <LogOutButton>
           <DropdownMenuItem className="hover:cursor-pointer">

@@ -98,7 +98,13 @@ export const {
       token.isOAuth = !!exisitingAccount
       token.name = exisitingUser.name
       token.email = exisitingUser.email
-      token.profileImage = exisitingUser.profileImage
+
+      /**
+       * the reason we can't pass the profileImage through jwt
+       * is due to the size of the profilImage string and it being
+       * stored in cookies cause issues due to its 45kb limit 
+       */
+      // token.profileImage = exisitingUser.profileImage 
 
       token.role = exisitingUser.role; // how to return the logged in user role
       token.isTwoFactorEnabled = exisitingUser.isTwoFactorEnabled; // how to return the logged in user 2FA status

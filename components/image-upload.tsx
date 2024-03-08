@@ -4,6 +4,7 @@ import * as React from 'react';
 import Image from 'next/image';
 
 import { useDropzone } from 'react-dropzone';
+import imageCompression from 'browser-image-compression'
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -24,26 +25,39 @@ const ImageUpload = ({
 }: ImageUploadsInteface) => {
   const [base64, setBase64] = React.useState(value);
 
-  const handleChange = React.useCallback(
-    (base64: string) => {
-      onChange(base64);
-    },
-    [onChange]
-  );
+  // const handleChange = React.useCallback(
+  //   (base64: string) => {
+  //     onChange(base64);
+  //   },
+  //   [onChange]
+  // );
 
   const handleDrop = React.useCallback(
-    (files: any) => {
+    async (files: any) => {
       const file = files[0];
-      const reader = new FileReader();
+      const options = {
+        maxSizeMB: 1 / 1024,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        initialQuality: 0.8,
+      }
 
-      reader.onload = (event: any) => {
-        setBase64(event.target.value);
-        handleChange(event.target.value);
-      };
+      try {
+        const compressedFile = await imageCompression(file, options)
+        const reader = new FileReader()
 
-      reader.readAsDataURL(file)
+        reader.onload = (event: any) => {
+          const compressedBase64 = event.target.result;
+          setBase64(compressedBase64);
+          onChange(compressedBase64);
+        }
+        reader.readAsDataURL(compressedFile)
+
+      } catch (error) {
+        console.error(error)
+      }
     },
-    [handleChange]
+    [onChange]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -51,7 +65,7 @@ const ImageUpload = ({
     onDrop: handleDrop,
     disabled,
     accept: {
-      'image/jpege': [],
+      'image/jpeg': [],
       'image/png': [],
     },
   });
@@ -60,9 +74,9 @@ const ImageUpload = ({
     (event: any) => {
       event.stopPropagation();
       setBase64('');
-      handleChange('');
+      onChange('');
     },
-    [handleChange]
+    [onChange]
   );
 
   return (
