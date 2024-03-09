@@ -14,8 +14,8 @@ export const sendTwoFactorCodeEmail = async (
       subject: 'NextAuth Two Factor Authentication Code',
       html: `<p>${
         name
-          ? `Hello ${name}, here is your 2FA Code: <b>${token}</b>`
-          : `Hello, here is your 2FA Code: ${token}`
+          ? `Hello ${name}, here is your 2FA Code: <b>${token.slice(0,3)}-${token.slice(3)}</b>`
+          : `Hello, here is your 2FA Code: ${token.slice(0,3)}-${token.slice(3)}`
       }</p>`,
     });
   } catch (error) {

@@ -4,6 +4,8 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { LoginSchema } from '@/schemas';
 
+import { PuffLoader } from 'react-spinners';
+
 import {
   Form,
   FormField,
@@ -43,6 +45,11 @@ export const TwoFactorCodeForm = ({
   isPending,
   handleLoginSubmit,
 }: TwoFactorCodeProps) => {
+  
+  const resendTwoFactorCode = async () => {
+    // TODO: implement resend 2FA code
+  }
+
   return (
     <CardWrapper
       cardTitle="Two Factor Authentication"
@@ -52,55 +59,63 @@ export const TwoFactorCodeForm = ({
       backButtonHref="/auth/register"
       backButtonVariant={'outline'}
     >
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleLoginSubmit)}
-          className="space-y-6"
-        >
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="code"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className='flex justify-center'>Two Factor Authentication Code</FormLabel>
-                  <FormControl>
-                    <InputOTP
-                      {...field}
-                      value={field.value || ''}
-                      type="tel"
-                      disabled={isPending}
-                      maxLength={6}
-                      className="flex justify-center"
-                      render={({ slots }) => (
-                        <InputOTPGroup className="gap-2">
-                          {slots.map((slot, index) => (
-                            <React.Fragment key={index}>
-                              <InputOTPSlot
-                                className="rounded-md border"
-                                {...slot}
-                              />
-                              {index !== slots.length - 1 && (
-                                <InputOTPSeparator />
-                              )}
-                            </React.Fragment>
-                          ))}{' '}
-                        </InputOTPGroup>
-                      )}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
-          <Button type="submit" className="w-full" disabled={isPending}>
-            Confirm
-          </Button>
-        </form>
-      </Form>
+      {isPending ? (
+        <div className='flex justify-center w-full'>
+          <PuffLoader color="gray" />
+        </div>
+      ) : (
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleLoginSubmit)}
+            className="space-y-6"
+          >
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex justify-center">
+                      Two Factor Authentication Code
+                    </FormLabel>
+                    <FormControl>
+                      <InputOTP
+                        {...field}
+                        value={field.value || ''}
+                        type="tel"
+                        disabled={isPending}
+                        maxLength={6}
+                        className="flex justify-center"
+                        render={({ slots }) => (
+                          <InputOTPGroup className="gap-2">
+                            {slots.map((slot, index) => (
+                              <React.Fragment key={index}>
+                                <InputOTPSlot
+                                  className="rounded-md border"
+                                  {...slot}
+                                />
+                                {index !== slots.length - 1 && (
+                                  <InputOTPSeparator />
+                                )}
+                              </React.Fragment>
+                            ))}{' '}
+                          </InputOTPGroup>
+                        )}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormError message={error} />
+            <FormSuccess message={success} />
+            <Button type="submit" className="w-full" disabled={isPending}>
+              Confirm
+            </Button>
+          </form>
+        </Form>
+      )}
     </CardWrapper>
   );
 };
